@@ -19,9 +19,9 @@ void get_URL( const string& host, const string& path )
   request += "Host: " + host + "\r\n";
   request += "Connection: close\r\n";
   request += "\r\n";
-  
+
   sock.write( request );
-  
+
   // Read the response
   string response;
   while ( !sock.eof() ) {

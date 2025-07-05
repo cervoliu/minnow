@@ -25,7 +25,7 @@ protected:
   // Please add any additional state to the ByteStream here, and not to the Writer and Reader interfaces.
   uint64_t capacity_;
   uint64_t bytes_pushed_ {}, bytes_popped_ {}; // Cumulative counts of bytes pushed and popped
-  std::string buffer_ {}; // Buffer to store data pushed to the stream
+  std::string buffer_ {};                      // Buffer to store data pushed to the stream
   bool error_ {};
   bool closed_ {}; // Flags indicating if the stream has been closed
 };
@@ -34,7 +34,7 @@ class Writer : public ByteStream
 {
 public:
   void push( std::string_view data ); // Push data to stream, but only as much as available capacity allows.
-  void close();                  // Signal that the stream has reached its ending. Nothing more will be written.
+  void close(); // Signal that the stream has reached its ending. Nothing more will be written.
 
   bool is_closed() const;              // Has the stream been closed?
   uint64_t available_capacity() const; // How many bytes can be pushed to the stream right now?
