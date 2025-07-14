@@ -1,12 +1,19 @@
 #pragma once
 
 #include "byte_stream.hh"
+#include <map>
 
 class Reassembler
 {
 public:
   // Construct Reassembler to write into given ByteStream.
-  explicit Reassembler( ByteStream&& output ) : output_( std::move( output ) ) {}
+  explicit Reassembler( ByteStream&& output )
+    : output_( std::move( output ) )
+    , unassembled_data_()
+    , next_assembled_index_( 0 )
+    , final_index_known_( false )
+    , final_index_( 0 )
+  {}
 
   /*
    * Insert a new substring to be reassembled into a ByteStream.
@@ -43,4 +50,15 @@ public:
 
 private:
   ByteStream output_;
+
+  // Internal state for reassembly
+  std::map<uint64_t, std::string> unassembled_data_; // Map from index to data segments
+  uint64_t next_assembled_index_ = 0;                // Next index we expect to assemble
+  bool final_index_known_ = false;                   // Whether we know the final index
+  uint64_t final_index_ = 0;                         // The final index (when known)
+
+  // Helper methods
+  void merge_segment( uint64_t first_index, const std::string& data );
+  void assemble_consecutive_data();
+  void check_close_condition();
 };
